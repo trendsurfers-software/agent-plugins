@@ -19,41 +19,31 @@ One plugin — `trendsurfers` — with two capability packs:
 
 1. In PortfolioManager: **Settings → MCP Server** → enable it. PortfolioManager writes the generated token to the `PM_MCP_TOKEN` user environment variable automatically whenever its MCP server starts or the token is regenerated.
 2. Verify `PM_MCP_TOKEN` is present in your environment (`echo %PM_MCP_TOKEN%` in a NEW terminal); set it manually from Settings → MCP Server only if absent.
-3. Set the environment variable `SL_REPORTS_ROOT` to PortfolioManager's AI-reports folder — an absolute path, and the directory must already exist.
+3. Set the environment variable `SL_REPORTS_ROOT` to PortfolioManager's **AI reports folder** — the exact path shown in PM Settings → MCP Server (absolute path; the directory must exist). Keeping these two the same is what makes the combo run smoothly: PortfolioManager writes every backtest report into that folder, and StrategyLens is allowed to read exactly that folder — so reports are analyzable the moment a backtest finishes, with no copying and no permission errors.
+   - StrategyLens can be allowed **more than one folder** if you need it (say, an archive of older reports): each extra folder is one more path at the end of the `args` list in the plugin's bundled `plugins/trendsurfers/.mcp.json` — add paths, never replace the `${SL_REPORTS_ROOT}` entry. Same idea in the Codex `config.toml` block below.
 4. Restart the client (Claude Code or Codex). Environment variable changes are not picked up mid-session.
 
 The bundled configuration targets `http://127.0.0.1:8765/mcp` — PortfolioManager's default MCP port. If you changed the port in PM Settings → MCP Server, set the environment variable `PM_MCP_URL` to the full endpoint (e.g. `http://127.0.0.1:9000/mcp`) and restart the client; when unset, the default above is used. Codex users set the URL directly in the `config.toml` block below instead.
 
-### Setting the environment variables, per client
+### Setting the environment variables — step by step
 
-The variables in play: `PM_MCP_TOKEN` (PortfolioManager maintains it automatically — see step 1), `SL_REPORTS_ROOT` (you set it once), and optionally `PM_MCP_URL` (only for a non-default PM port).
+Two variables matter: `SL_REPORTS_ROOT` (you set it once) and `PM_MCP_TOKEN` (PortfolioManager manages it for you). Everything happens once, on the Windows PC where PortfolioManager runs.
 
-**Windows user environment (works for every client — recommended).** Start menu → *"Edit environment variables for your account"* → add the variable under *User variables*. Or from any terminal:
+**Set the variable in Windows (every app reads this):**
 
-```
-setx SL_REPORTS_ROOT "C:\path\to\pm-ai-reports"
-```
+1. Press the Windows key, type `environment`, and open **"Edit environment variables for your account"**.
+2. Under *User variables*, click **New…** — Name: `SL_REPORTS_ROOT`, Value: the full path of PortfolioManager's AI-reports folder (shown in PM Settings → MCP Server). Click OK.
+3. Check that `PM_MCP_TOKEN` already appears in the same list — PortfolioManager adds and refreshes it by itself whenever its MCP server is on. Only add it by hand if it is missing.
+4. Fully restart the app you use — quit it from the system-tray icon too, not just the window. Apps read these variables only at startup.
 
-`setx` (and the GUI) affect **future** processes only — fully restart the client afterwards, including quitting any tray icon. A common trap: `set X=...` (cmd) or `$env:X=...` (PowerShell) only lives inside that one shell window and is gone the moment the client launches from anywhere else.
+**Then, depending on what you use:**
 
-**Claude Code — terminal, VS Code/JetBrains extensions, and desktop-app (Cowork) local sessions.** All surfaces read the Windows user environment above. Alternatively, pin the variables in `%USERPROFILE%\.claude\settings.json` so every Claude Code session gets them regardless of how it was launched:
+- **Claude Code in a terminal or IDE (VS Code / JetBrains):** nothing more to do — open a new terminal or window.
+- **Claude desktop app (including Cowork):** fully quit the app (tray icon → Quit) and start it again. It picks up the same Windows variables.
+- **Codex — CLI, IDE extension, or the ChatGPT desktop app:** the same Windows variables are picked up. Additionally paste the `config.toml` block below once — all Codex surfaces on the same machine share that file. In the ChatGPT desktop app, run Codex in a **local** environment (its settings pane), not a cloud one.
+- **ChatGPT on the web, or Codex cloud tasks: cannot be used.** Those run on OpenAI's servers and cannot reach the PortfolioManager on your PC. Any cloud-hosted agent has the same limitation — use one of the local options above.
 
-```json
-{
-  "env": {
-    "SL_REPORTS_ROOT": "C:\\path\\to\\pm-ai-reports",
-    "PM_MCP_URL": "http://127.0.0.1:8765/mcp"
-  }
-}
-```
-
-Leave `PM_MCP_TOKEN` out of `settings.json` — PortfolioManager keeps the Windows user variable current automatically, and a copied value in `settings.json` would go stale on token regeneration.
-
-**Claude Desktop app.** The app is not launched from a terminal, so shell-only exports never reach it. Use the Windows user environment (or the `settings.json` block above for its Cowork sessions), then fully quit and relaunch the app.
-
-**Codex CLI and IDE extension.** Inherit the Windows user environment like any local program. The `bearer_token_env_var = "PM_MCP_TOKEN"` line in `~/.codex/config.toml` (block below) tells Codex which variable holds the PM token.
-
-**Codex in ChatGPT (web, or cloud tasks) — not supported.** Those sessions run in OpenAI's cloud sandbox and cannot reach PortfolioManager at `127.0.0.1`. The same applies to any cloud-hosted agent: these plugins require a client running on the same Windows machine as PortfolioManager — Claude Code, the Claude desktop app, Codex CLI, or the Codex IDE extension.
+*Advanced (optional, Claude Code only):* variables can also live in `%USERPROFILE%\.claude\settings.json` as `{"env": {"SL_REPORTS_ROOT": "C:\\path\\to\\pm-ai-reports"}}` — they then apply to every Claude Code session no matter how it was launched. Do not put `PM_MCP_TOKEN` there: a copied value goes stale when the token regenerates; the Windows variable is always current.
 
 ## Install — Claude Code
 
