@@ -1,0 +1,7 @@
+{
+  "name": "trendsurfers",
+  "plugins": [
+    { "name": "backtest-lab", "source": { "source": "local", "path": "./plugins/backtest-lab" } },
+    { "name": "ubs-ea", "source": { "source": "local", "path": "./plugins/ubs-ea" } }
+  ]
+}

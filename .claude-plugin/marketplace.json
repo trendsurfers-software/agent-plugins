@@ -1,0 +1,17 @@
+{
+  "name": "trendsurfers",
+  "description": "Claude Code & Codex plugins for disciplined MT5 backtesting, powered by the PortfolioManager and StrategyLens MCPs.",
+  "owner": { "name": "TrendSurfers", "url": "https://trendsurfers.io" },
+  "plugins": [
+    {
+      "name": "backtest-lab",
+      "source": "./plugins/backtest-lab",
+      "description": "Disciplined MT5 backtest campaigns via the PortfolioManager + StrategyLens MCPs — IS/OOS methodology, robustness checks, per-EA knowledge base."
+    },
+    {
+      "name": "ubs-ea",
+      "source": "./plugins/ubs-ea",
+      "description": "Ultimate Breakout System (UBS) EA domain pack — .set expertise, risk modes, deployment, campaigns. Requires backtest-lab."
+    }
+  ]
+}
