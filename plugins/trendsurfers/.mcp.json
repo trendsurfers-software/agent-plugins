@@ -7,7 +7,7 @@
     },
     "strategy-lens": {
       "command": "cmd",
-      "args": ["/c", "npx", "-y", "@trendsurfers/strategy-lens-mcp@latest", "${SL_REPORTS_ROOT}", "${SL_REPORTS_ROOT_2:-}", "${SL_REPORTS_ROOT_3:-}"]
+      "args": ["/c", "npx", "-y", "@trendsurfers/strategy-lens-mcp@latest", "${PM_SL_REPORTS_ROOT:-}", "${SL_REPORTS_ROOT:-}"]
     }
   }
 }
