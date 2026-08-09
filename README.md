@@ -24,6 +24,37 @@ One plugin — `trendsurfers` — with two capability packs:
 
 The bundled configuration targets `http://127.0.0.1:8765/mcp` — PortfolioManager's default MCP port. If you changed the port in PM Settings → MCP Server, set the environment variable `PM_MCP_URL` to the full endpoint (e.g. `http://127.0.0.1:9000/mcp`) and restart the client; when unset, the default above is used. Codex users set the URL directly in the `config.toml` block below instead.
 
+### Setting the environment variables, per client
+
+The variables in play: `PM_MCP_TOKEN` (PortfolioManager maintains it automatically — see step 1), `SL_REPORTS_ROOT` (you set it once), and optionally `PM_MCP_URL` (only for a non-default PM port).
+
+**Windows user environment (works for every client — recommended).** Start menu → *"Edit environment variables for your account"* → add the variable under *User variables*. Or from any terminal:
+
+```
+setx SL_REPORTS_ROOT "C:\path\to\pm-ai-reports"
+```
+
+`setx` (and the GUI) affect **future** processes only — fully restart the client afterwards, including quitting any tray icon. A common trap: `set X=...` (cmd) or `$env:X=...` (PowerShell) only lives inside that one shell window and is gone the moment the client launches from anywhere else.
+
+**Claude Code — terminal, VS Code/JetBrains extensions, and desktop-app (Cowork) local sessions.** All surfaces read the Windows user environment above. Alternatively, pin the variables in `%USERPROFILE%\.claude\settings.json` so every Claude Code session gets them regardless of how it was launched:
+
+```json
+{
+  "env": {
+    "SL_REPORTS_ROOT": "C:\\path\\to\\pm-ai-reports",
+    "PM_MCP_URL": "http://127.0.0.1:8765/mcp"
+  }
+}
+```
+
+Leave `PM_MCP_TOKEN` out of `settings.json` — PortfolioManager keeps the Windows user variable current automatically, and a copied value in `settings.json` would go stale on token regeneration.
+
+**Claude Desktop app.** The app is not launched from a terminal, so shell-only exports never reach it. Use the Windows user environment (or the `settings.json` block above for its Cowork sessions), then fully quit and relaunch the app.
+
+**Codex CLI and IDE extension.** Inherit the Windows user environment like any local program. The `bearer_token_env_var = "PM_MCP_TOKEN"` line in `~/.codex/config.toml` (block below) tells Codex which variable holds the PM token.
+
+**Codex in ChatGPT (web, or cloud tasks) — not supported.** Those sessions run in OpenAI's cloud sandbox and cannot reach PortfolioManager at `127.0.0.1`. The same applies to any cloud-hosted agent: these plugins require a client running on the same Windows machine as PortfolioManager — Claude Code, the Claude desktop app, Codex CLI, or the Codex IDE extension.
+
 ## Install — Claude Code
 
 ```
