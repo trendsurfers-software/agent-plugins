@@ -1,0 +1,6 @@
+{
+  "name": "trendsurfers",
+  "version": "0.2.0",
+  "description": "TrendSurfers backtest lab for MT5: disciplined campaigns (in-sample/out-of-sample, robustness, per-EA knowledge base) via the PortfolioManager MCP and StrategyLens MCP, plus the Ultimate Breakout System (UBS) EA domain pack.",
+  "skills": "./skills/"
+}

@@ -1,6 +1,6 @@
 ---
 name: ubs-ea
-description: Use when working with the Ultimate Breakout System (UBS) MQL5 Expert Advisor by tradewithwim.com — reading, writing, or troubleshooting its .set files, choosing Risk and lot-sizing inputs, selecting entry engines, deploying via AutoLoader/OneChart, or backtesting it for any symbol and timeframe. Requires the backtest-lab plugin.
+description: Use when working with the Ultimate Breakout System (UBS) MQL5 Expert Advisor by tradewithwim.com — reading, writing, or troubleshooting its .set files, choosing Risk and lot-sizing inputs, selecting entry engines, deploying via AutoLoader/OneChart, or backtesting it for any symbol and timeframe. Backtest execution and analysis route through this plugin's backtest-campaigns skill and bundled MCP servers.
 ---
 
 # Ultimate Breakout System (UBS) EA

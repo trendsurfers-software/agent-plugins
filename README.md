@@ -4,10 +4,10 @@ AI-agent plugins for TrendSurfers PortfolioManager + StrategyLens — Claude Cod
 
 ## What this is
 
-One marketplace, two plugins:
+One plugin — `trendsurfers` — with two capability packs:
 
-- **backtest-lab** — disciplined MT5 backtest campaigns driven through two product surfaces: the **PortfolioManager MCP**, which is the *execution* surface (enqueue, run, and manage MT5 backtests), and the **StrategyLens MCP**, which is the *analysis* surface (read reports, compute stats). Enforces in-sample/out-of-sample methodology, robustness checks (cross-broker, cross-range, cross-tick-model), and a per-EA knowledge base so a dead configuration is never silently re-run.
-- **ubs-ea** — a domain pack for the Ultimate Breakout System (UBS) Expert Advisor: reading and designing `.set` files, choosing risk modes, deployment guidance, and campaign templates tuned to UBS. **Requires `backtest-lab`** — it has no orchestration of its own and routes all execution and analysis through it.
+- **Backtest lab** — disciplined MT5 backtest campaigns driven through two product surfaces: the **PortfolioManager MCP**, which is the *execution* surface (enqueue, run, and manage MT5 backtests), and the **StrategyLens MCP**, which is the *analysis* surface (read reports, compute stats). Enforces in-sample/out-of-sample methodology, robustness checks (cross-broker, cross-range, cross-tick-model), and a per-EA knowledge base so a dead configuration is never silently re-run.
+- **UBS domain pack** — for the Ultimate Breakout System (UBS) Expert Advisor: reading and designing `.set` files, choosing risk modes, deployment guidance, and campaign templates tuned to UBS. It has no orchestration of its own — all execution and analysis route through the backtest lab tools in this same plugin.
 
 ## Requirements
 
@@ -28,19 +28,16 @@ The bundled configuration targets `http://127.0.0.1:8765/mcp` — PortfolioManag
 
 ```
 /plugin marketplace add trendsurfers-software/agent-plugins
-/plugin install backtest-lab@trendsurfers
-/plugin install ubs-ea@trendsurfers
-/backtest-lab:lab-init
+/plugin install trendsurfers@trendsurfers
+/trendsurfers:lab-init
 ```
 
-`ubs-ea` declares `backtest-lab` as a dependency; installing both explicitly (either order) is still the recommended path.
-
-`/backtest-lab:lab-init` scaffolds the lab workspace in the current directory and runs the same connection checks as `/backtest-lab:lab-doctor`.
+`/trendsurfers:lab-init` scaffolds the lab workspace in the current directory and runs the same connection checks as `/trendsurfers:lab-doctor`.
 
 ## Install — Codex
 
 1. Clone this repo.
-2. Point Codex at the local catalog: `.agents/plugins/marketplace.json`. This lists both plugins as local-path sources (`./plugins/backtest-lab`, `./plugins/ubs-ea`).
+2. Point Codex at the local catalog: `.agents/plugins/marketplace.json`. This lists the plugin as a local-path source (`./plugins/trendsurfers`).
 3. Invoke `$lab-setup` — Codex sessions have no slash commands, so this skill covers both first-time workspace setup and the full connection diagnostics inline (the same checks as `lab-doctor` above).
 
 Codex always needs the PortfolioManager server declared in `~/.codex/config.toml` — the bundled plugin MCP config is Claude-shaped and its token header does not map to Codex's `bearer_token_env_var`, so PM authentication fails without this block even when the catalog is picked up. Add the StrategyLens entry too if your setup does not pick up the local catalog:
@@ -57,13 +54,13 @@ args = ["/c", "npx", "-y", "@trendsurfers/strategy-lens-mcp@latest", "<your SL_R
 
 ## Reproducibility note
 
-The StrategyLens MCP package is pinned to `@latest` deliberately, so every campaign runs against the current release. To pin a specific version instead — for a reproducible archived campaign, for example — replace `@latest` with `@trendsurfers/strategy-lens-mcp@<version>` in the plugin's bundled `plugins/backtest-lab/.mcp.json`, or in the `args` array of the `config.toml` block above.
+The StrategyLens MCP package is pinned to `@latest` deliberately, so every campaign runs against the current release. To pin a specific version instead — for a reproducible archived campaign, for example — replace `@latest` with `@trendsurfers/strategy-lens-mcp@<version>` in the plugin's bundled `plugins/trendsurfers/.mcp.json`, or in the `args` array of the `config.toml` block above.
 
 ## First campaign
 
 ```
 cd <your lab workspace>       # created by lab-init
-/backtest-lab:lab-campaign <EA> <SYMBOL-TF> <slug>
+/trendsurfers:lab-campaign <EA> <SYMBOL-TF> <slug>
 ```
 
 Read the `backtest-campaigns` skill first — it defines the mandatory campaign folder structure, IS/OOS methodology, and reporting rules that apply before you enqueue anything.

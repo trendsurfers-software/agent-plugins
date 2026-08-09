@@ -5,7 +5,7 @@ description: "Use to set up or troubleshoot the backtest lab: first-time setup, 
 
 # Lab Setup — workspace scaffolding and connection troubleshooting
 
-This skill is self-contained (Codex sessions have no slash commands): it covers first-time workspace setup and full connection diagnostics inline. On Claude, the equivalent procedures are also available as `/backtest-lab:lab-init` and `/backtest-lab:lab-doctor`.
+This skill is self-contained (Codex sessions have no slash commands): it covers first-time workspace setup and full connection diagnostics inline. On Claude, the equivalent procedures are also available as `/trendsurfers:lab-init` and `/trendsurfers:lab-doctor`.
 
 ## Prerequisites
 
@@ -38,4 +38,3 @@ Run these checks in order; report each as PASS/FAIL with the fix for any FAIL. D
 4. Alignment: call `get_backtest_defaults` and read `aiReportsRootFolder` — the folder an omitted `reportRoot` actually resolves to (`get_settings` does NOT expose it; `defaultReportsRootFolder` in the same response is a different, internal folder). Compare with `SL_REPORTS_ROOT`. Mismatch = WARN: reports enqueued with default reportRoot will land where StrategyLens cannot read them — set SL_REPORTS_ROOT to PM's AI-reports folder (recommended) or pass reportRoot explicitly on every enqueue.
 5. StrategyLens alive: call `sl_list_allowed_roots`; confirm one root resolves to `SL_REPORTS_ROOT`. FAIL fix: restart client (SL roots are fixed at launch).
 6. Experts: call `list_experts`; confirm the user's EA (e.g. the UBS .ex5) is listed. FAIL fix: install the EA in the master terminal, re-run.
-7. Plugins: confirm the ubs-ea plugin is installed if UBS work is intended (it requires backtest-lab).

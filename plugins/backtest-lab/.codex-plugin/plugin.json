@@ -1,6 +1,0 @@
-{
-  "name": "backtest-lab",
-  "version": "0.1.0",
-  "description": "Disciplined MT5 backtest campaigns (in-sample/out-of-sample, robustness, per-EA knowledge base) driven through the TrendSurfers PortfolioManager MCP and StrategyLens MCP.",
-  "skills": "./skills/"
-}

@@ -1,7 +1,0 @@
-{
-  "name": "ubs-ea",
-  "version": "0.1.0",
-  "description": "Operate the Ultimate Breakout System (UBS) MT5 Expert Advisor with AI agents: .set file reading and design, risk-mode selection, deployment, and backtest campaigns. Requires the backtest-lab plugin for orchestration.",
-  "author": { "name": "TrendSurfers" },
-  "dependencies": ["backtest-lab"]
-}
