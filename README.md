@@ -22,7 +22,7 @@ One plugin — `trendsurfers` — with two capability packs:
 3. Set the environment variable `SL_REPORTS_ROOT` to PortfolioManager's AI-reports folder — an absolute path, and the directory must already exist.
 4. Restart the client (Claude Code or Codex). Environment variable changes are not picked up mid-session.
 
-The bundled configuration targets `http://127.0.0.1:8765/mcp` — PortfolioManager's default MCP port. If you changed the port in PM Settings → MCP Server, either change it back to 8765 or override the server URL in your client configuration.
+The bundled configuration targets `http://127.0.0.1:8765/mcp` — PortfolioManager's default MCP port. If you changed the port in PM Settings → MCP Server, set the environment variable `PM_MCP_URL` to the full endpoint (e.g. `http://127.0.0.1:9000/mcp`) and restart the client; when unset, the default above is used. Codex users set the URL directly in the `config.toml` block below instead.
 
 ## Install — Claude Code
 
